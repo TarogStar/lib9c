@@ -1,12 +1,16 @@
-﻿namespace Lib9c.Tests.Action
+namespace Lib9c.Tests.Action
 {
     using System;
     using System.Collections.Generic;
     using System.Collections.Immutable;
+    using System.IO;
     using System.Linq;
+    using System.Runtime.Serialization.Formatters.Binary;
+    using Bencodex.Types;
     using Libplanet;
     using Libplanet.Action;
     using Libplanet.Crypto;
+    using MessagePack;
     using Nekoyume;
     using Nekoyume.Action;
     using Nekoyume.Battle;
@@ -21,7 +25,7 @@
     using Xunit.Abstractions;
     using static SerializeKeys;
 
-    public class RankingBattleTest
+    public class RankingBattle10Test
     {
         private readonly TableSheets _tableSheets;
         private readonly Address _agent1Address;
@@ -30,7 +34,7 @@
         private readonly Address _weeklyArenaAddress;
         private readonly IAccountStateDelta _initialState;
 
-        public RankingBattleTest(ITestOutputHelper outputHelper)
+        public RankingBattle10Test(ITestOutputHelper outputHelper)
         {
             _initialState = new State();
 
@@ -192,7 +196,7 @@
                     .SetState(_avatar2Address, enemyAvatarState.SerializeV2());
             }
 
-            var action = new RankingBattle
+            var action = new RankingBattle10
             {
                 avatarAddress = _avatar1Address,
                 enemyAddress = _avatar2Address,
@@ -230,7 +234,7 @@
                 action.EnemyAvatarState,
                 new List<Guid>(),
                 _tableSheets.GetRankingSimulatorSheets(),
-                RankingBattle.StageId,
+                RankingBattle10.StageId,
                 action.ArenaInfo,
                 action.EnemyArenaInfo,
                 _tableSheets.CostumeStatSheet);
@@ -246,7 +250,7 @@
         [Fact]
         public void ExecuteThrowInvalidAddressException()
         {
-            var action = new RankingBattle
+            var action = new RankingBattle10
             {
                 avatarAddress = _avatar1Address,
                 enemyAddress = _avatar1Address,
@@ -290,7 +294,7 @@
                     break;
             }
 
-            var action = new RankingBattle
+            var action = new RankingBattle10
             {
                 avatarAddress = avatarAddress,
                 enemyAddress = enemyAddress,
@@ -324,7 +328,7 @@
                 _avatar1Address,
                 previousAvatar1State.Serialize());
 
-            var action = new RankingBattle
+            var action = new RankingBattle10
             {
                 avatarAddress = _avatar1Address,
                 enemyAddress = _avatar2Address,
@@ -355,7 +359,7 @@
                 _weeklyArenaAddress,
                 previousWeeklyArenaState.Serialize());
 
-            var action = new RankingBattle
+            var action = new RankingBattle10
             {
                 avatarAddress = _avatar1Address,
                 enemyAddress = _avatar2Address,
@@ -388,7 +392,7 @@
                 _weeklyArenaAddress,
                 previousWeeklyArenaState.Serialize());
 
-            var action = new RankingBattle
+            var action = new RankingBattle10
             {
                 avatarAddress = _avatar1Address,
                 enemyAddress = _avatar2Address,
@@ -428,7 +432,7 @@
                 _weeklyArenaAddress,
                 previousWeeklyArenaState.Serialize());
 
-            var action = new RankingBattle
+            var action = new RankingBattle10
             {
                 avatarAddress = _avatar1Address,
                 enemyAddress = _avatar2Address,
@@ -452,7 +456,7 @@
         [Fact]
         public void Rehearsal()
         {
-            var action = new RankingBattle
+            var action = new RankingBattle10
             {
                 avatarAddress = _avatar1Address,
                 enemyAddress = _avatar2Address,
@@ -519,7 +523,7 @@
 
             var state = _initialState.SetState(_avatar1Address, previousAvatarState.Serialize());
 
-            var action = new RankingBattle
+            var action = new RankingBattle10
             {
                 avatarAddress = _avatar1Address,
                 enemyAddress = _avatar2Address,
