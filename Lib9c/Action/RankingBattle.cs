@@ -30,7 +30,7 @@ namespace Nekoyume.Action
         public List<Guid> costumeIds;
         public List<Guid> equipmentIds;
         public BattleLog Result { get; private set; }
-        public AvatarState EnemyAvatarState;
+        public SimulationEnemyPlayer EnemyPlayer;
         public ArenaInfo ArenaInfo;
         public ArenaInfo EnemyArenaInfo;
 
@@ -306,7 +306,7 @@ namespace Nekoyume.Action
             var ended = DateTimeOffset.UtcNow;
             Log.Verbose("{AddressesHex}RankingBattle Total Executed Time: {Elapsed}", addressesHex,
                 ended - started);
-            EnemyAvatarState = enemyAvatarState;
+            EnemyPlayer = new SimulationEnemyPlayer(enemyPlayer);
             return states;
         }
 
